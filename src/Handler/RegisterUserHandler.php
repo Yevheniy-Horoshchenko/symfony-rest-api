@@ -25,17 +25,11 @@ class RegisterUserHandler
 
     public function __invoke(Request $request): array
     {
-        try {
-            $registerUserDto = $this->serializer->deserialize(
-                $request->getContent(),
-                RegisterUserDto::class,
-                'json'
-            );
-        } catch (\Throwable $e) {
-            return ValidationErrorFormatter::mapErrors(
-                message: 'Invalid JSON body'
-            );
-        }
+        $registerUserDto = $this->serializer->deserialize(
+            $request->getContent(),
+            RegisterUserDto::class,
+            'json'
+        );
 
         $errors = $this->validator->validate($registerUserDto);
     
