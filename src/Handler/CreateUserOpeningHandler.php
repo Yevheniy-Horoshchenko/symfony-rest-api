@@ -23,17 +23,11 @@ class CreateUserOpeningHandler
 
     public function __invoke(Request $request): array
     {
-        try {
-            $createUserOpeningDto = $this->serializer->deserialize(
-                $request->getContent(), 
-                CreateUserOpeningDto::class, 
-                'json'
-            );
-        } catch (\Throwable $e) {
-            return ValidationErrorFormatter::mapErrors(
-                message: 'Invalid JSON body'
-            );
-        }
+        $createUserOpeningDto = $this->serializer->deserialize(
+            $request->getContent(), 
+            CreateUserOpeningDto::class, 
+            'json'
+        );
 
         $errors = $this->validator->validate($createUserOpeningDto);
 
