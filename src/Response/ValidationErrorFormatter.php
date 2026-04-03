@@ -7,15 +7,26 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 class ValidationErrorFormatter
 {
     public static function mapErrors(
-        ConstraintViolationListInterface $constraintViolationList
+        ?ConstraintViolationListInterface $errors = null,
+        ?string $message = null
     ): array {
         $formattedErrors = [];
 
-        foreach($constraintViolationList as $error) {
-            $formattedErrors[] = [
-                'property' => $error->getPropertyPath(),
-                'message' => $error->getMessage(),
-            ];
+        if ($errors instanceof ConstraintViolationListInterface) {
+            foreach($errors as $error) {
+                $formattedErrors[] = [
+                    'property' => $error->getPropertyPath(),
+                    'message' => $error->getMessage(),
+                ];
+            }
+        }
+
+        if ($message) {
+            $formattedErrors['message'] = $message;
+        }
+
+        if ($formattedErrors) {
+            $formattedErrors['success'] = false;
         }
 
         return $formattedErrors;
