@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Opening;
 use App\Handler\CreateUserOpeningHandler;
+use App\Handler\DeleteUserOpeningHandler;
 use App\Handler\GetUserOpeningsHandler;
 use App\Handler\UpdateUserOpeningHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,5 +36,13 @@ class UserOpeningController extends AbstractController
         UpdateUserOpeningHandler $updateUserOpeningHandler
     ): JsonResponse {
         return $this->json($updateUserOpeningHandler($request, $opening));
+    }
+
+    #[Route(path: '/{opening}', name: 'delete_api_opening', methods: [Request::METHOD_DELETE])]
+    public function deleteUserOpening(
+        Opening $opening,
+        DeleteUserOpeningHandler $deleteUserOpeningHandler
+    ): JsonResponse {
+        return $this->json($deleteUserOpeningHandler($opening));
     }
 }
