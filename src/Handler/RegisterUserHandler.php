@@ -4,6 +4,7 @@ namespace App\Handler;
 
 use App\DTO\RegisterUserDto;
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Response\ValidationErrorFormatter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +15,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RegisterUserHandler
 {
     public function __construct(
-        protected SerializerInterface $serializer,
-        protected ValidatorInterface $validator,
-        protected UserPasswordHasherInterface $passwordHasher,
-        protected EntityManagerInterface $enitityManager
+        private SerializerInterface $serializer,
+        private ValidatorInterface $validator,
+        private UserPasswordHasherInterface $passwordHasher,
+        private EntityManagerInterface $enitityManager,
+        private UserRepository $userRepository
     ) {
     }
 
@@ -30,9 +32,15 @@ class RegisterUserHandler
         $formattedErrors = ValidationErrorFormatter::mapErrors($errors);
 
         if ($formattedErrors) {
-            $formattedErrors['success'] = false;
-            
             return $formattedErrors;
+        }
+
+        $user = $this->userRepository->findOneBy(['email' => $registrationData->email]);
+
+        if ($user) {
+            return ValidationErrorFormatter::mapErrors(
+                message: 'User with this email already exists'
+            );
         }
 
         $user = new User();

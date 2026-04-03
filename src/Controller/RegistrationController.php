@@ -13,8 +13,6 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'registration', methods: [Request::METHOD_POST])]
     public function register(Request $request, RegisterUserHandler $registerUserHandler): JsonResponse
     {
-        $response = $registerUserHandler($request);
-        
-        return new JsonResponse($response);
+        return $this->json($registerUserHandler($request));
     }
 }
