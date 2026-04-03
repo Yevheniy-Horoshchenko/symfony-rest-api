@@ -25,9 +25,19 @@ class RegisterUserHandler
 
     public function __invoke(Request $request): array
     {
-        $registrationData = $this->serializer->deserialize($request->getContent(), RegisterUserDto::class, 'json');
+        try {
+            $registerUserDto = $this->serializer->deserialize(
+                $request->getContent(),
+                RegisterUserDto::class,
+                'json'
+            );
+        } catch (\Throwable $e) {
+            return ValidationErrorFormatter::mapErrors(
+                message: 'Invalid JSON body'
+            );
+        }
 
-        $errors = $this->validator->validate($registrationData);
+        $errors = $this->validator->validate($registerUserDto);
     
         $formattedErrors = ValidationErrorFormatter::mapErrors($errors);
 
@@ -35,7 +45,7 @@ class RegisterUserHandler
             return $formattedErrors;
         }
 
-        $user = $this->userRepository->findOneBy(['email' => $registrationData->email]);
+        $user = $this->userRepository->findOneBy(['email' => $registerUserDto->email]);
 
         if ($user) {
             return ValidationErrorFormatter::mapErrors(
@@ -45,9 +55,9 @@ class RegisterUserHandler
 
         $user = new User();
 
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $registrationData->password);
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $registerUserDto->password);
 
-        $user->setEmail($registrationData->email)
+        $user->setEmail($registerUserDto->email)
             ->setPassword($hashedPassword);
 
         $this->enitityManager->persist($user);

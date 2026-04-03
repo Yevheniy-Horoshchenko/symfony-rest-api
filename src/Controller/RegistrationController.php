@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'registration', methods: [Request::METHOD_POST])]
+    #[Route(path: '/register', name: 'registration', methods: [Request::METHOD_POST])]
     public function register(Request $request, RegisterUserHandler $registerUserHandler): JsonResponse
     {
         return $this->json($registerUserHandler($request));

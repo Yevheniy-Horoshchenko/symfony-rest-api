@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ApiController extends AbstractController
 {
-    #[Route('/', name: 'get_openings', methods: [Request::METHOD_GET])]
+    #[Route(path: '', name: 'get_openings', methods: [Request::METHOD_GET])]
     public function getOpenings(): Response
     {
         return new Response('Hello');

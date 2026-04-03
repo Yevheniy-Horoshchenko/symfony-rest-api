@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +32,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(targetEntity: Opening::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $openings;
+
+    public function __construct()
+    {
+        $this->openings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -92,6 +101,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getOpenings(): Collection
+    {
+        return $this->openings;
+    }
+
+    public function setOpenings(Collection $openings): static
+    {
+        $this->openings = $openings;
 
         return $this;
     }
