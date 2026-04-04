@@ -4,6 +4,7 @@ namespace App\Handler;
 
 use App\DTO\UpdateUserOpeningDto;
 use App\Entity\Opening;
+use App\Response\SuccessResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -34,6 +35,8 @@ class UpdateUserOpeningHandler
 
         $this->entityManager->flush();
 
-        return ['success' => true];
+        return new SuccessResponse()
+            ->setSuccess(true)
+            ->toArray();
     }
 }

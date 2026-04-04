@@ -5,7 +5,8 @@ namespace App\Handler;
 use App\DTO\RegisterUserDto;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Response\ValidationErrorFormatter;
+use App\Response\ErrorResponseFormatter;
+use App\Response\SuccessResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -33,7 +34,7 @@ class RegisterUserHandler
 
         $errors = $this->validator->validate($registerUserDto);
     
-        $formattedErrors = ValidationErrorFormatter::mapErrors($errors);
+        $formattedErrors = ErrorResponseFormatter::form($errors);
 
         if ($formattedErrors) {
             return $formattedErrors;
@@ -42,7 +43,7 @@ class RegisterUserHandler
         $user = $this->userRepository->findOneBy(['email' => $registerUserDto->email]);
 
         if ($user) {
-            return ValidationErrorFormatter::mapErrors(
+            return ErrorResponseFormatter::form(
                 message: 'User with this email already exists'
             );
         }
@@ -57,6 +58,8 @@ class RegisterUserHandler
         $this->enitityManager->persist($user);
         $this->enitityManager->flush();
 
-        return ['success' => true];
+        return new SuccessResponse()
+            ->setSuccess(true)
+            ->toArray();
     }
 }

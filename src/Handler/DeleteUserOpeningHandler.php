@@ -3,6 +3,7 @@
 namespace App\Handler;
 
 use App\Entity\Opening;
+use App\Response\SuccessResponse;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DeleteUserOpeningHandler
@@ -17,6 +18,8 @@ class DeleteUserOpeningHandler
         $this->entityManager->remove($opening);
         $this->entityManager->flush();
 
-        return ['success' => true];
+        return new SuccessResponse()
+            ->setSuccess(true)
+            ->toArray();
     }
 }
