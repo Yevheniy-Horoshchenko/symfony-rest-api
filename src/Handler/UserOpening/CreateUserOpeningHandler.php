@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Handler;
+namespace App\Handler\UserOpening;
 
 use App\DTO\CreateUserOpeningDto;
 use App\Entity\Opening;
+use App\Repository\OpeningRepository;
 use App\Response\ErrorResponseFormatter;
 use App\Response\SuccessResponse;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,6 +19,7 @@ class CreateUserOpeningHandler
         private Security $security,
         private SerializerInterface $serializer,
         private ValidatorInterface $validator,
+        private OpeningRepository $openingRepository,
         private EntityManagerInterface $entityManager
     ) {
     }
@@ -36,6 +38,16 @@ class CreateUserOpeningHandler
 
         if ($formattedErrors) {
             return $formattedErrors;
+        }
+
+        $name = $createUserOpeningDto->name;
+
+        $existOpening = $this->openingRepository->findOneBy(['name' => $name]);
+
+        if ($existOpening) {
+            return ErrorResponseFormatter::form(
+                message: "Opening with name {$name} already exists"
+            );
         }
 
         $opening = new Opening()

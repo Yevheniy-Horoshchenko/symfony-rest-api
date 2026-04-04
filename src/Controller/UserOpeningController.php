@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Opening;
-use App\Handler\CreateUserOpeningHandler;
-use App\Handler\DeleteUserOpeningHandler;
-use App\Handler\GetUserOpeningsHandler;
-use App\Handler\UpdateUserOpeningHandler;
+use App\Handler\UserOpening\CreateUserOpeningHandler;
+use App\Handler\UserOpening\DeleteUserOpeningHandler;
+use App\Handler\UserOpening\GetUserOpeningsHandler;
+use App\Handler\UserOpening\UpdateUserOpeningHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
