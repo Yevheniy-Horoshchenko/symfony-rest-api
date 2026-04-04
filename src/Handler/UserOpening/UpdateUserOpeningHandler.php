@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handler;
+namespace App\Handler\UserOpening;
 
 use App\DTO\UpdateUserOpeningDto;
 use App\Entity\Opening;
