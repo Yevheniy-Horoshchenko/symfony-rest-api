@@ -4,7 +4,8 @@ namespace App\Handler;
 
 use App\DTO\CreateUserOpeningDto;
 use App\Entity\Opening;
-use App\Response\ValidationErrorFormatter;
+use App\Response\ErrorResponseFormatter;
+use App\Response\SuccessResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,7 +32,7 @@ class CreateUserOpeningHandler
 
         $errors = $this->validator->validate($createUserOpeningDto);
 
-        $formattedErrors = ValidationErrorFormatter::mapErrors($errors);
+        $formattedErrors = ErrorResponseFormatter::form($errors);
 
         if ($formattedErrors) {
             return $formattedErrors;
@@ -45,6 +46,8 @@ class CreateUserOpeningHandler
         $this->entityManager->persist($opening);
         $this->entityManager->flush();
 
-        return ['success' => true];
+        return new SuccessResponse()
+            ->setSuccess(true)
+            ->toArray();
     }
 }

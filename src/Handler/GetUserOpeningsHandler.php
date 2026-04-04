@@ -5,6 +5,7 @@ namespace App\Handler;
 use App\Entity\User;
 use App\Repository\OpeningRepository;
 use App\Response\OpeningResponse;
+use App\Response\SuccessResponse;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class GetUserOpeningsHandler
@@ -22,6 +23,9 @@ class GetUserOpeningsHandler
         
         $openings = $this->openingRepository->findBy(['user' => $user]);
 
-        return $openings ? OpeningResponse::collection($openings) : [];
+        return new SuccessResponse()
+            ->setSuccess(true)
+            ->setData(OpeningResponse::collection($openings))
+            ->toArray();
     }
 }

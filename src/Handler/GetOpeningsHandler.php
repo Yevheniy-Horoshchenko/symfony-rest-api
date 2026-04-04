@@ -3,6 +3,8 @@
 namespace App\Handler;
 
 use App\Repository\OpeningRepository;
+use App\Response\OpeningResponse;
+use App\Response\SuccessResponse;
 
 class GetOpeningsHandler
 {
@@ -13,6 +15,11 @@ class GetOpeningsHandler
 
     public function __invoke(): array
     {
-        return $this->openingRepository->findAll();
+        $openings = $this->openingRepository->findBy(['user' => null]);
+
+        return new SuccessResponse()
+            ->setSuccess(true)
+            ->setData(OpeningResponse::collection($openings))
+            ->toArray();
     }
 }

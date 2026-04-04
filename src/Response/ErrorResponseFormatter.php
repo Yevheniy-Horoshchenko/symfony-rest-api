@@ -4,9 +4,9 @@ namespace App\Response;
 
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class ValidationErrorFormatter
+class ErrorResponseFormatter
 {
-    public static function mapErrors(
+    public static function form(
         ?ConstraintViolationListInterface $errors = null,
         ?string $message = null
     ): array {
