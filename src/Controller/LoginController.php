@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ApiLoginController extends AbstractController
+final class LoginController extends AbstractController
 {
     #[Route(path: '/api/login', name: 'api_login')]
     public function index(): JsonResponse

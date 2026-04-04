@@ -25,10 +25,6 @@ class ValidationErrorFormatter
             $formattedErrors['message'] = $message;
         }
 
-        if ($formattedErrors) {
-            $formattedErrors['success'] = false;
-        }
-
-        return $formattedErrors;
+        return $formattedErrors ? array_merge(['success' => false], $formattedErrors) : [];
     }
 }
